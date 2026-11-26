@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Commute Carbon Footprint Calculator</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            eco: {
+              50: '#f2f8f5',
+              100: '#e0efe7',
+              200: '#c2dfd0',
+              500: '#2d7a5e',
+              700: '#1b4d3e',
+              800: '#143b30',
+              900: '#0d2820',
+            },
+            earth: {
+              50: '#f9f7f4',
+              100: '#f0ece3',
+              200: '#e2d9c8',
+              700: '#5c4d3c',
+            },
+            smog: {
+              500: '#64748b',
+              700: '#334155',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-earth-50 text-slate-800 font-sans antialiased selection:bg-eco-500 selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="bg-eco-900 text-white sticky top-0 z-40 shadow-md border-b border-eco-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5">
+        <!-- Leaf SVG Icon -->
+        <div class="w-9 h-9 rounded-xl bg-eco-500/20 border border-eco-500/40 flex items-center justify-center text-emerald-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+        </div>
+        <span class="font-bold text-lg tracking-tight">EcoCommute <span class="text-emerald-400 font-normal text-sm hidden sm:inline">| Carbon Footprint Calculator</span></span>
+      </div>
+      <nav class="flex items-center space-x-4 sm:space-x-6 text-sm font-medium text-emerald-100/90">
+        <a href="#calculator" class="hover:text-white transition">Calculator</a>
+        <a href="#comparison" class="hover:text-white transition">Comparison</a>
+        <a href="#exhaust-gallery" class="hover:text-white transition">Exhaust & Impact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 1. Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-eco-900 via-eco-800 to-smog-900 text-white py-14 sm:py-20">
+    <!-- Decorative Background Glow -->
+    <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-1.5 mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-xs sm:text-sm font-medium text-emerald-200 tracking-wide">DAILY COMMUTE CARBON FOOTPRINT</span>
+      </div>
+
+      <!-- Featured Prompt Headline -->
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-6">
+        “How much carbon dioxide do you produce per day if you decide to ride a bike, motorcycle, or drive a car?”
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="text-base sm:text-lg text-slate-200 max-w-3xl mx-auto leading-relaxed mb-8">
+        Your daily commute choice shapes our climate. Enter your average daily travel distance by bicycle, motorcycle, or car to instantly calculate your CO₂ emissions and discover how many trees are needed to offset your footprint.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="#calculator" class="px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-eco-900 font-bold text-sm sm:text-base shadow-lg shadow-emerald-950/40 transition transform hover:-translate-y-0.5">
+          Calculate My Footprint ↓
+        </a>
+        <a href="#exhaust-gallery" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-sm sm:text-base transition">
+          Explore Exhaust Impact
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-16">
+
+    <!-- 2. Core Feature - Daily Carbon Emission Calculator -->
+    <section id="calculator" class="scroll-mt-20">
+      <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/70 border border-earth-200 overflow-hidden">
+        <!-- Card Header -->
+        <div class="bg-eco-700 text-white px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              Daily Commute CO₂ Calculator
+            </h2>
+            <p class="text-emerald-100 text-xs sm:text-sm mt-0.5">Select your primary mode of transport and daily distance to estimate daily, monthly, and annual emissions.</p>
+          </div>
+          <span id="selected-factor-badge" class="inline-block bg-eco-900/60 border border-emerald-400/30 text-emerald-200 text-xs font-semibold px-3 py-1.5 rounded-lg self-start sm:self-center">
+            Emission Factor: 95 g CO₂/km
+          </span>
+        </div>
+
+        <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Left Control Panel: Transport Mode & Distance -->
+          <div class="lg:col-span-6 space-y-7">
+            <!-- Step 1: Select Transport Mode -->
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-3">
+                1. Choose Your Transport Mode
+              </label>
+              <div id="vehicle-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Dynamically populated by JavaScript -->
+              </div>
+
+              <!-- Bicycle Lifecycle Toggle Switch -->
+              <div id="bicycle-lifecycle-box" class="mt-3 p-3.5 rounded-2xl bg-eco-50 border border-eco-200 flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold text-eco-800">Include bicycle manufacturing & food energy emissions?</p>
+                  <p class="text-[11px] text-slate-600 mt-0.5">Direct tailpipe emission is 0 g/km; full lifecycle & dietary metabolic impact is ~16 g CO₂/km.</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input type="checkbox" id="bike-lifecycle-toggle" class="sr-only peer" />
+                  <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-eco-500"></div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 2: Set Average Daily Distance -->
+            <div class="bg-earth-50 p-5 rounded-2xl border border-earth-200 space-y-4">
+              <div class="flex items-center justify-between">
+                <label for="distance-input" class="text-sm font-bold text-slate-700">
+                  2. Average Daily Distance (km / day)
+                </label>
+                <div class="flex items-center bg-white border border-slate-300 rounded-xl px-3 py-1.5 shadow-sm focus-within:ring-2 focus-within:ring-eco-500 focus-within:border-eco-500">
+                  <input
+                    type="number"
+                    id="distance-input"
+                    min="0"
+                    max="500"
+                    step="0.5"
+                    value="15"
+                    class="w-20 text-right font-extrabold text-lg text-eco-800 focus:outline-none"
+                  />
+                  <span class="ml-1.5 text-sm font-semibold text-slate-500">km</span>
+                </div>
+              </div>
+
+              <!-- Range Slider -->
+              <input
+                type="range"
+                id="distance-slider"
+                min="0"
+                max="150"
+                step="1"
+                value="15"
+                class="w-full h-2.5 bg-earth-200 rounded-lg appearance-none cursor-pointer accent-eco-700"
+              />
+
+              <!-- Quick Commute Scenario Presets -->
+              <div class="flex flex-wrap items-center gap-2 pt-1">
+                <span class="text-xs text-slate-500 font-medium">Quick Presets:</span>
+                <button type="button" data-km="5" class="preset-km-btn px-2.5 py-1 text-xs font-semibold rounded-lg bg-white border border-slate-200 hover:border-eco-500 hover:text-eco-700 transition">5 km Short Trip</button>
+                <button type="button" data-km="15" class="preset-km-btn px-2.5 py-1 text-xs font-semibold rounded-lg bg-white border border-slate-200 hover:border-eco-500 hover:text-eco-700 transition">15 km City Commute</button>
+                <button type="button" data-km="30" class="preset-km-btn px-2.5 py-1 text-xs font-semibold rounded-lg bg-white border border-slate-200 hover:border-eco-500 hover:text-eco-700 transition">30 km Cross-Town</button>
+                <button type="button" data-km="50" class="preset-km-btn px-2.5 py-1 text-xs font-semibold rounded-lg bg-white border border-slate-200 hover:border-eco-500 hover:text-eco-700 transition">50 km Long Drive</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Results Dashboard -->
+          <div class="lg:col-span-6 flex flex-col justify-between bg-gradient-to-br from-slate-900 to-smog-700 text-white rounded-2xl p-6 sm:p-7 shadow-inner">
+            <div>
+              <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
+                <div>
+                  <p class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Estimated Carbon Footprint</p>
+                  <h3 id="result-vehicle-title" class="text-lg sm:text-xl font-bold text-white mt-0.5">Gasoline Motorcycle · 15 km / day</h3>
+                </div>
+                <span id="impact-tag" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                  Moderate Impact
+                </span>
+              </div>
+
+              <!-- Primary Daily CO2 Figure -->
+              <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4 text-center">
+                <p class="text-xs text-slate-300 font-medium mb-1">Daily Carbon Dioxide Produced (Daily CO₂)</p>
+                <div class="flex items-baseline justify-center gap-2">
+                  <span id="daily-co2" class="text-4xl sm:text-5xl font-black tracking-tight text-amber-400">1.43</span>
+                  <span class="text-base sm:text-lg font-bold text-slate-300">kg CO₂ / day</span>
+                </div>
+                <p id="daily-grams-note" class="text-xs text-slate-400 mt-1">Equivalent to 1,425 grams of CO₂</p>
+              </div>
+
+              <!-- Monthly & Yearly CO2 Grid -->
+              <div class="grid grid-cols-2 gap-3.5 mb-5">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+                  <p class="text-xs text-slate-300">Monthly Emissions (30 days)</p>
+                  <p class="text-xl sm:text-2xl font-extrabold text-white mt-1">
+                    <span id="monthly-co2">42.75</span> <span class="text-xs font-normal text-slate-400">kg CO₂</span>
+                  </p>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+                  <p class="text-xs text-slate-300">Annual Emissions (365 days)</p>
+                  <p class="text-xl sm:text-2xl font-extrabold text-orange-300 mt-1">
+                    <span id="yearly-co2">520.13</span> <span class="text-xs font-normal text-slate-400">kg CO₂</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tree Sequestration Offset Card -->
+            <div class="bg-emerald-950/80 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 flex items-center gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center shrink-0 text-emerald-400">
+                <!-- Tree SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 19v3"/>
+                  <path d="M8 19h8"/>
+                  <path d="M12 3L5 13h4l-3 6h12l-3-6h4L12 3z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-xs text-emerald-300 font-semibold">Natural Carbon Offset (1 mature tree absorbs ~12 kg CO₂/yr)</p>
+                <p class="text-sm sm:text-base text-white mt-0.5 leading-snug">
+                  You need approximately <span id="trees-needed" class="text-2xl font-black text-emerald-400 mx-1">43.3</span> trees to absorb your annual commute emissions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Side-by-Side Transport Comparison Bar Chart -->
+    <section id="comparison" class="scroll-mt-20 bg-white rounded-3xl shadow-lg shadow-slate-200/60 border border-earth-200 p-6 sm:p-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-2">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-eco-700 bg-eco-100 px-2.5 py-1 rounded-md">SIDE-BY-SIDE COMPARISON</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-2">
+            Daily CO₂ Emissions Across Transport Modes
+          </h2>
+          <p class="text-sm text-slate-600 mt-1">
+            Comparing emissions for <strong id="comp-km-label" class="text-eco-700">15 km / day</strong>. Switching modes drastically cuts greenhouse gases and exhaust fumes.
+          </p>
+        </div>
+        <div id="saving-tip" class="text-xs sm:text-sm font-semibold text-eco-800 bg-eco-50 border border-eco-200 px-4 py-2.5 rounded-xl">
+          💡 Switching to a bicycle saves <span id="yearly-saving-kg" class="font-bold text-eco-700">520.1</span> kg of CO₂ per year!
+        </div>
+      </div>
+
+      <!-- Horizontal Bar Chart List -->
+      <div id="comparison-bars" class="space-y-4">
+        <!-- Dynamically populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- 4. Exhaust & Environmental Impact Visual Gallery -->
+    <section id="exhaust-gallery" class="scroll-mt-20 space-y-6">
+      <div class="text-center max-w-3xl mx-auto">
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full">EXHAUST & ENVIRONMENTAL IMPACT</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+          The Hidden Cost of Tailpipe Exhaust & The Power of Clean Mobility
+        </h2>
+        <p class="text-sm sm:text-base text-slate-600 mt-2">
+          Burning fossil fuels in cars and motorcycles releases not only carbon dioxide (CO₂) that drives climate change, but also fine particulate matter (PM2.5), nitrogen oxides (NOx), and carbon monoxide that degrade urban air quality.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Card 1: Vehicle Exhaust Fumes -->
+        <article class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition border border-earth-200 flex flex-col">
+          <div class="relative h-56 bg-slate-800 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?auto=format&fit=crop&w=800&q=80"
+              alt="Car exhaust pipe emitting smoke and carbon fumes"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <!-- SVG Fallback Illustration -->
+            <div style="display:none;" class="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 flex-col items-center justify-center p-6 text-slate-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-amber-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+              </svg>
+              <span class="text-xs font-semibold">Tailpipe Exhaust & Carbon Fumes</span>
+            </div>
+            <span class="absolute top-3 left-3 bg-red-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+              High Carbon · 170–220 g/km
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">Tailpipe Exhaust & Greenhouse Gases</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Every liter of gasoline burned produces roughly 2.3 kg of CO₂. Driving alone in a conventional car emits 170 to 220 grams of CO₂ per kilometer, making daily driving one of the largest contributors to personal carbon footprints.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-semibold text-red-700">
+              Key Pollutants: CO₂, Carbon Monoxide (CO), Hydrocarbons
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Urban Traffic Smog & Air Pollution -->
+        <article class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition border border-earth-200 flex flex-col">
+          <div class="relative h-56 bg-slate-800 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?auto=format&fit=crop&w=800&q=80"
+              alt="City traffic congestion and air pollution smog"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <!-- SVG Fallback Illustration -->
+            <div style="display:none;" class="w-full h-full bg-gradient-to-br from-zinc-700 to-stone-900 flex-col items-center justify-center p-6 text-slate-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-orange-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <span class="text-xs font-semibold">Urban Traffic & Smog Haze</span>
+            </div>
+            <span class="absolute top-3 left-3 bg-amber-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+              Urban Smog · Idling Emissions
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">Rush-Hour Congestion & Urban Smog</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Stop-and-go traffic and idling engines cause incomplete fuel combustion, concentrating PM2.5 particles and photochemical smog in dense cities—harming respiratory health and amplifying urban heat islands.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-semibold text-amber-700">
+              Environmental Impact: PM2.5 Particulates, NOx, Urban Heat
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Zero-Tailpipe Clean Cycling -->
+        <article class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition border border-earth-200 flex flex-col">
+          <div class="relative h-56 bg-eco-900 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=800&q=80"
+              alt="Cyclist riding a bicycle outdoors in clean air"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <!-- SVG Fallback Illustration -->
+            <div style="display:none;" class="w-full h-full bg-gradient-to-br from-eco-700 to-eco-900 flex-col items-center justify-center p-6 text-emerald-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-emerald-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <circle cx="5.5" cy="17.5" r="3.5" />
+                <circle cx="18.5" cy="17.5" r="3.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 6a1 1 0 100-2 1 1 0 000 2zm-3 11.5V14l-3-3 4-3 2 3h2" />
+              </svg>
+              <span class="text-xs font-semibold">Zero-Tailpipe Green Commuting</span>
+            </div>
+            <span class="absolute top-3 left-3 bg-emerald-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+              Clean Air · 0 g Tailpipe CO₂
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">Cycling & Low-Carbon Mobility</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Replacing short trips under 5 km with a bicycle eliminates tailpipe exhaust and traffic noise while boosting cardiovascular fitness. Even switching from a gas car to an electric scooter cuts emissions by over 85%.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-semibold text-eco-700">
+              Green Benefits: Zero Direct Exhaust, Better Personal Health
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-eco-900 text-slate-300 py-10 border-t border-eco-800 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm">
+      <div>
+        <p class="font-bold text-white">EcoCommute · Daily Commute Carbon Footprint Calculator</p>
+        <p class="text-slate-400 mt-1">Note: Emission factors represent average lifecycle/tailpipe estimates based on IEA and EPA reference benchmarks; actual figures vary by vehicle efficiency and grid mix.</p>
+      </div>
+      <div class="text-slate-400 text-center sm:text-right">
+        <p>Ride a Bike · Choose Clean Air · Protect Our Planet</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Calculation & Chart Logic -->
+  <script>
+    // Transport mode definitions and average emission factors (g CO2 / km)
+    const VEHICLES = [
+      {
+        id: 'bicycle',
+        name: 'Bicycle',
+        subtitle: 'Zero Tailpipe Exhaust',
+        factor: 0, // Direct tailpipe = 0 g/km; toggleable to 16 g/km lifecycle
+        lifecycleFactor: 16,
+        colorClass: 'bg-emerald-500',
+        badgeText: 'Zero Tailpipe',
+        badgeStyle: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>`
+      },
+      {
+        id: 'escooter',
+        name: 'Electric Scooter',
+        subtitle: 'Grid-Charged EV',
+        factor: 25,
+        colorClass: 'bg-teal-500',
+        badgeText: 'Low Carbon',
+        badgeStyle: 'bg-teal-500/20 text-teal-300 border-teal-400/30',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`
+      },
+      {
+        id: 'motorcycle',
+        name: 'Gasoline Motorcycle',
+        subtitle: '2-Wheeler Combustion',
+        factor: 95,
+        colorClass: 'bg-amber-500',
+        badgeText: 'Moderate Impact',
+        badgeStyle: 'bg-amber-500/20 text-amber-300 border-amber-400/30',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M8 17.5h7l3-7.5h-4l-2 3H8l-2.5 4.5z"/><path d="M14 6h4l1 4"/></svg>`
+      },
+      {
+        id: 'car',
+        name: 'Gasoline Car',
+        subtitle: 'Standard Sedan',
+        factor: 170,
+        colorClass: 'bg-orange-500',
+        badgeText: 'High Carbon',
+        badgeStyle: 'bg-orange-500/20 text-orange-300 border-orange-400/30',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>`
+      },
+      {
+        id: 'suv',
+        name: 'SUV / Large Car',
+        subtitle: 'Heavy Passenger Vehicle',
+        factor: 220,
+        colorClass: 'bg-red-600',
+        badgeText: 'Very High Carbon',
+        badgeStyle: 'bg-red-500/20 text-red-300 border-red-400/30',
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h1l2-4h9l3 4h1a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>`
+      }
+    ];
+
+    // Application State
+    let state = {
+      selectedVehicleId: 'motorcycle',
+      distanceKm: 15,
+      includeBikeLifecycle: false
+    };
+
+    // Retrieve active emission factor (g CO2 / km)
+    function getEffectiveFactor(vehicle) {
+      if (vehicle.id === 'bicycle' && state.includeBikeLifecycle) {
+        return vehicle.lifecycleFactor;
+      }
+      return vehicle.factor;
+    }
+
+    // Render transport mode selector buttons
+    function renderVehicleButtons() {
+      const grid = document.getElementById('vehicle-grid');
+      grid.innerHTML = VEHICLES.map(v => {
+        const isSelected = v.id === state.selectedVehicleId;
+        const currentFactor = getEffectiveFactor(v);
+        return `
+          <button
+            type="button"
+            onclick="selectVehicle('${v.id}')"
+            class="text-left p-3.5 rounded-2xl border-2 transition-all flex items-center gap-3.5 ${
+              isSelected
+                ? 'border-eco-700 bg-eco-50/80 shadow-sm ring-2 ring-eco-500/20'
+                : 'border-slate-200 bg-white hover:border-eco-500/50 hover:bg-slate-50'
+            }"
+          >
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+              isSelected ? 'bg-eco-700 text-white' : 'bg-slate-100 text-slate-600'
+            }">
+              ${v.icon}
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center justify-between gap-1">
+                <p class="font-bold text-sm text-slate-900 truncate">${v.name}</p>
+              </div>
+              <p class="text-[11px] text-slate-500 truncate">${v.subtitle}</p>
+              <p class="text-xs font-semibold mt-0.5 ${isSelected ? 'text-eco-700' : 'text-slate-600'}">
+                ~${currentFactor} g CO₂/km
+              </p>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    // Handle transport mode selection
+    function selectVehicle(id) {
+      state.selectedVehicleId = id;
+      renderVehicleButtons();
+      updateCalculations();
+    }
+
+    // Core calculation and UI update
+    function updateCalculations() {
+      const vehicle = VEHICLES.find(v => v.id === state.selectedVehicleId) || VEHICLES[2];
+      const factor = getEffectiveFactor(vehicle);
+      const km = Math.max(0, Number(state.distanceKm) || 0);
+
+      // Daily, Monthly (30 days), Annual (365 days) emissions in kg
+      const dailyGrams = km * factor;
+      const dailyKg = dailyGrams / 1000;
+      const monthlyKg = dailyKg * 30;
+      const yearlyKg = dailyKg * 365;
+
+      // Trees needed to offset annual CO2 (1 mature tree absorbs ~12 kg CO2/year)
+      const treesNeeded = yearlyKg / 12;
+
+      // Update factor badge
+      document.getElementById('selected-factor-badge').textContent = `Emission Factor: ${factor} g CO₂/km`;
+
+      // Update results dashboard
+      document.getElementById('result-vehicle-title').textContent = `${vehicle.name} · ${km} km / day`;
+      const impactTag = document.getElementById('impact-tag');
+      impactTag.textContent = vehicle.badgeText;
+      impactTag.className = `px-3 py-1 rounded-full text-xs font-bold border ${vehicle.badgeStyle}`;
+
+      document.getElementById('daily-co2').textContent = dailyKg.toFixed(2);
+      document.getElementById('daily-grams-note').textContent = `Equivalent to ${Math.round(dailyGrams).toLocaleString()} grams of CO₂`;
+      document.getElementById('monthly-co2').textContent = monthlyKg.toFixed(2);
+      document.getElementById('yearly-co2').textContent = yearlyKg.toFixed(2);
+      document.getElementById('trees-needed').textContent = treesNeeded.toFixed(1);
+
+      // Update comparison bar chart
+      renderComparisonChart(km, yearlyKg);
+    }
+
+    // Render horizontal bar chart comparing all 5 transport modes
+    function renderComparisonChart(km, currentYearlyKg) {
+      document.getElementById('comp-km-label').textContent = `${km} km / day`;
+
+      // Max scale reference (SUV at 220 g/km)
+      const maxDailyKg = Math.max(0.01, (km * 220) / 1000);
+
+      const container = document.getElementById('comparison-bars');
+      container.innerHTML = VEHICLES.map(v => {
+        const factor = getEffectiveFactor(v);
+        const vDailyKg = (km * factor) / 1000;
+        const vYearlyKg = vDailyKg * 365;
+        const widthPercent = km === 0 ? 0 : Math.min(100, Math.max(vDailyKg > 0 ? 3 : 0, (vDailyKg / maxDailyKg) * 100));
+        const isCurrent = v.id === state.selectedVehicleId;
+
+        return `
+          <div class="p-3.5 rounded-2xl border transition ${
+            isCurrent ? 'bg-eco-50/70 border-eco-500/50 shadow-sm' : 'bg-slate-50/70 border-slate-200/80'
+          }">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-slate-900">${v.name}</span>
+                <span class="text-xs text-slate-500">(${factor} g/km)</span>
+                ${isCurrent ? '<span class="text-[11px] font-bold bg-eco-700 text-white px-2 py-0.5 rounded-md">Selected</span>' : ''}
+              </div>
+              <div class="text-right">
+                <span class="font-extrabold text-sm sm:text-base text-slate-900">${vDailyKg.toFixed(2)} kg</span>
+                <span class="text-xs text-slate-500">/ day</span>
+                <span class="text-xs text-slate-400 ml-2 hidden sm:inline">(${vYearlyKg.toFixed(1)} kg / yr)</span>
+              </div>
+            </div>
+            <!-- Progress Bar Track -->
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+              <div
+                class="h-full ${v.colorClass} rounded-full transition-all duration-500 ease-out"
+                style="width: ${widthPercent}%"
+              ></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Update annual carbon savings tip
+      const savingTipEl = document.getElementById('saving-tip');
+      const bikeFactor = getEffectiveFactor(VEHICLES[0]);
+      const bikeYearlyKg = ((km * bikeFactor) / 1000) * 365;
+      const diffYearly = currentYearlyKg - bikeYearlyKg;
+
+      if (state.selectedVehicleId === 'bicycle' || diffYearly <= 0.1) {
+        savingTipEl.innerHTML = `🌱 Awesome! You chose the cleanest zero-tailpipe way to commute.`;
+      } else {
+        savingTipEl.innerHTML = `💡 Switching to a bicycle saves <span class="font-bold text-eco-700">${diffYearly.toFixed(1)} kg</span> of CO₂ per year!`;
+      }
+    }
+
+    // Bind event listeners and initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      const distanceInput = document.getElementById('distance-input');
+      const distanceSlider = document.getElementById('distance-slider');
+      const lifecycleToggle = document.getElementById('bike-lifecycle-toggle');
+      const presetButtons = document.querySelectorAll('.preset-km-btn');
+
+      // Sync numeric input with range slider
+      distanceInput.addEventListener('input', (e) => {
+        let val = parseFloat(e.target.value);
+        if (isNaN(val) || val < 0) val = 0;
+        if (val > 500) val = 500;
+        state.distanceKm = val;
+        distanceSlider.value = Math.min(150, val);
+        updateCalculations();
+      });
+
+      // Sync range slider with numeric input
+      distanceSlider.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        state.distanceKm = val;
+        distanceInput.value = val;
+        updateCalculations();
+      });
+
+      // Bicycle lifecycle emission toggle
+      lifecycleToggle.addEventListener('change', (e) => {
+        state.includeBikeLifecycle = e.target.checked;
+        renderVehicleButtons();
+        updateCalculations();
+      });
+
+      // Quick scenario preset buttons
+      presetButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const km = parseFloat(btn.getAttribute('data-km'));
+          state.distanceKm = km;
+          distanceInput.value = km;
+          distanceSlider.value = km;
+          updateCalculations();
+        });
+      });
+
+      // Initial render
+      renderVehicleButtons();
+      updateCalculations();
+    });
+  </script>
+</body>
+</html>
